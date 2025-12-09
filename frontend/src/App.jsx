@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import MainLayout from "./components/Layout/MainLayout";
+
+// User pages
+import UserDashboard from "./pages/user/UserDashboard";
+import CategoriesPage from "./pages/user/CategoriesPage";
+import ServicesByCategoryPage from "./pages/user/ServicesByCategoryPage";
+import ServiceDetailsPage from "./pages/user/ServiceDetailsPage";
+import MyRequestsPage from "./pages/user/MyRequestsPage";
+
+// Admin pages
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminRequestsPage from "./pages/admin/AdminRequestsPage";
+
+// Public pages
+import LoginPage from "./pages/LoginPage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      {/* Public */}
+      <Route path="/login" element={<LoginPage />} />
+
+      {/* User */}
+      <Route path="/" element={<MainLayout role="user" />}>
+        <Route index element={<UserDashboard />} />
+        <Route path="categories" element={<CategoriesPage />} />
+        <Route
+          path="categories/:id/services"
+          element={<ServicesByCategoryPage />}
+        />
+        <Route path="services/:id" element={<ServiceDetailsPage />} />
+        <Route path="my-requests" element={<MyRequestsPage />} />
+      </Route>
+
+      {/* Admin */}
+      <Route path="/admin" element={<MainLayout role="admin" />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="requests" element={<AdminRequestsPage />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
