@@ -9,14 +9,22 @@ export default function ServicesByCategoryPage() {
   return (
     <div>
       <h1>Services in Category</h1>
-      <p><strong>Категория:</strong> {category ? category.name : id}</p>
+      <p>
+        <strong>Категория:</strong> {category ? category.name : id}
+      </p>
 
       {services.length === 0 ? (
         <p>Няма услуги за тази категория.</p>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "12px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "12px",
+          }}
+        >
           {services.map((s) => (
-            <div key={s.id} style={{ border: "1px solid #ddd", borderRadius: "10px", padding: "12px", background: "white" }}>
+            <div key={s.id} className="card">
               <h3 style={{ marginTop: 0 }}>{s.title}</h3>
               <p style={{ color: "#555" }}>{s.description}</p>
               <Link to={`/services/${s.id}`}>Open →</Link>

@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  loadRequests,
-  updateRequestStatus,
-} from "../../utils/requestsStorage";
+import { loadRequests, updateRequestStatus } from "../../utils/requestsStorage";
 import {
   REQUEST_STATUSES,
   getStatusLabel,
@@ -18,10 +15,7 @@ export default function MyRequestsPage() {
   }, []);
 
   function cancelRequest(requestId) {
-    const updated = updateRequestStatus(
-      requestId,
-      REQUEST_STATUSES.CANCELLED
-    );
+    const updated = updateRequestStatus(requestId, REQUEST_STATUSES.CANCELLED);
     setRequests(updated);
   }
 
@@ -38,13 +32,9 @@ export default function MyRequestsPage() {
     <div>
       <h1>My Requests</h1>
 
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ borderCollapse: "collapse", width: "100%" }}
-      >
+      <table className="table">
         <thead>
-          <tr style={{ background: "#f5f5f5" }}>
+          <tr>
             <th>Дата</th>
             <th>Услуга</th>
             <th>Статус</th>
@@ -59,11 +49,11 @@ export default function MyRequestsPage() {
               <td>{r.service.title}</td>
               <td>{getStatusLabel(r.status)}</td>
               <td>
-              {canUserCancel(r.status) && (
-  <button onClick={() => cancelRequest(r.id)}>
-    Cancel
-  </button>
-)}
+                {canUserCancel(r.status) && (
+                  <button className="btn" onClick={() => cancelRequest(r.id)}>
+                    Cancel
+                  </button>
+                )}
               </td>
             </tr>
           ))}

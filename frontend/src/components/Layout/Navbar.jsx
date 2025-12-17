@@ -1,8 +1,17 @@
 export default function Navbar({ role }) {
-    return (
-      <header style={{ background: "#f0f0f0", padding: "1rem", borderBottom: "1px solid #ccc" }}>
-        <strong>Administrative Services App</strong> — {role === "admin" ? "Admin Panel" : "User Panel"}
-      </header>
-    );
-  }
-  
+  return (
+    <header
+      style={{
+        background: "white",
+        borderBottom: "1px solid #e6e8ef",
+        padding: "12px 16px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <strong>Administrative Services App</strong>
+      <span className="badge">{role === "admin" ? "Admin Panel" : "User Panel"}</span>
+    </header>
+  );
+}

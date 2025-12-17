@@ -1,22 +1,39 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+const linkStyle = ({ isActive }) => ({
+  display: "block",
+  padding: "10px 12px",
+  borderRadius: "10px",
+  textDecoration: "none",
+  marginBottom: "6px",
+  background: isActive ? "#eef2ff" : "transparent",
+  border: isActive ? "1px solid #e0e7ff" : "1px solid transparent",
+});
 
 export default function Sidebar({ role }) {
   return (
-    <aside style={{ width: "220px", borderRight: "1px solid #ccc", padding: "1rem" }}>
+    <aside
+      style={{
+        width: "240px",
+        background: "white",
+        borderRight: "1px solid #e6e8ef",
+        padding: "12px",
+      }}
+    >
       {role === "user" && (
         <>
-          <h4>User Menu</h4>
-          <Link to="/">Dashboard</Link><br/>
-          <Link to="/categories">Categories</Link><br/>
-          <Link to="/my-requests">My Requests</Link>
+          <div style={{ fontWeight: 600, marginBottom: 10 }}>User Menu</div>
+          <NavLink to="/" style={linkStyle}>Dashboard</NavLink>
+          <NavLink to="/categories" style={linkStyle}>Categories</NavLink>
+          <NavLink to="/my-requests" style={linkStyle}>My Requests</NavLink>
         </>
       )}
 
       {role === "admin" && (
         <>
-          <h4>Admin Menu</h4>
-          <Link to="/admin">Dashboard</Link><br/>
-          <Link to="/admin/requests">All Requests</Link>
+          <div style={{ fontWeight: 600, marginBottom: 10 }}>Admin Menu</div>
+          <NavLink to="/admin" style={linkStyle} end>Dashboard</NavLink>
+          <NavLink to="/admin/requests" style={linkStyle}>All Requests</NavLink>
         </>
       )}
     </aside>
