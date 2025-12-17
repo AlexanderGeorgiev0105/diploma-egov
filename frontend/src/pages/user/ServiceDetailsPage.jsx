@@ -1,3 +1,7 @@
+import { buildRequest } from "../../utils/requestModel";
+import { addRequest } from "../../utils/requestsStorage";
+
+
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { servicesByCategory } from "../../data/mockData";
@@ -22,9 +26,26 @@ export default function ServiceDetailsPage() {
 
   function onSubmit(e) {
     e.preventDefault();
-    alert(`Заявката е записана локално (demo).\nУслуга: ${service?.title}\nИме: ${form.fullName}`);
+  
+    if (!form.fullName || !form.egn) {
+      alert("Моля, попълни задължителните полета.");
+      return;
+    }
+  
+    const request = buildRequest({
+      service,
+      fullName: form.fullName,
+      egn: form.egn,
+      details: form.details,
+    });
+  
+    addRequest(request);
+  
+    alert("Заявката е подадена успешно (demo).");
+  
     setForm({ fullName: "", egn: "", details: "" });
   }
+  
 
   if (!service) return <h1>Service not found</h1>;
 
