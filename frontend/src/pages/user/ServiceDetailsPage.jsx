@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { servicesByCategory } from "../../data/mockData";
 import { buildRequest } from "../../utils/requestModel";
 import { addRequest } from "../../utils/requestsStorage";
+import { isValidEGN } from "../../utils/validators";
+
 
 function findServiceById(serviceId) {
   for (const key of Object.keys(servicesByCategory)) {
@@ -23,15 +25,23 @@ export default function ServiceDetailsPage() {
     details: "",
   });
 
+  const [error, setError] = useState("");
+
   function onChange(e) {
+    setError("");
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
   }
 
   function onSubmit(e) {
     e.preventDefault();
-
-    if (!form.fullName || !form.egn) {
-      alert("Моля, попълни задължителните полета.");
+  
+    if (!form.fullName.trim() || !form.egn.trim()) {
+      setError("Моля, попълни задължителните полета (Три имена и ЕГН).");
+      return;
+    }
+  
+    if (!isValidEGN(form.egn)) {
+      setError("ЕГН трябва да е точно 10 цифри.");
       return;
     }
 
@@ -58,6 +68,15 @@ export default function ServiceDetailsPage() {
       <p style={{ color: "#555" }}>{service.description}</p>
 
       <h3>Подай заявка (demo)</h3>
+
+      {error && (
+        <div
+          className="card"
+          style={{ borderColor: "#fecaca", background: "#fff1f2", marginBottom: 10 }}
+        >
+          <strong style={{ color: "#991b1b" }}>Грешка:</strong> {error}
+        </div>
+      )}
 
       <form
         onSubmit={onSubmit}

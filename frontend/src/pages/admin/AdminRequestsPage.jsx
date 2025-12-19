@@ -16,33 +16,47 @@ import {
 
 export default function AdminRequestsPage() {
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setRequests(loadRequests());
+    setLoading(true);
+    setTimeout(() => {
+      setRequests(loadRequests());
+      setLoading(false);
+    }, 200);
   }, []);
 
   function markProcessing(id) {
-    const updated = updateRequestStatus(
-      id,
-      REQUEST_STATUSES.PROCESSING
-    );
+    const updated = updateRequestStatus(id, REQUEST_STATUSES.PROCESSING);
     setRequests(updated);
   }
 
   function approve(id) {
-    const updated = updateRequestStatus(
-      id,
-      REQUEST_STATUSES.APPROVED
-    );
+    const updated = updateRequestStatus(id, REQUEST_STATUSES.APPROVED);
     setRequests(updated);
   }
 
   function reject(id) {
-    const updated = updateRequestStatus(
-      id,
-      REQUEST_STATUSES.REJECTED
-    );
+    const updated = updateRequestStatus(id, REQUEST_STATUSES.REJECTED);
     setRequests(updated);
+  }
+
+  function clearDemoData() {
+    if (
+      window.confirm("Сигурен ли си, че искаш да изтриеш всички demo заявки?")
+    ) {
+      clearAllRequests();
+      setRequests([]);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div>
+        <h1>Admin Requests</h1>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (requests.length === 0) {
@@ -54,31 +68,17 @@ export default function AdminRequestsPage() {
     );
   }
 
-  function clearDemoData() {
-    if (window.confirm("Сигурен ли си, че искаш да изтриеш всички demo заявки?")) {
-      clearAllRequests();
-      setRequests([]);
-    }
-  }  
-
   return (
     <div>
       <h1>Admin Requests</h1>
 
-      <button
-  onClick={clearDemoData}
-  style={{ marginBottom: "10px" }}
->
-  Clear demo data
-</button>
+      <button className="btn" onClick={clearDemoData} style={{ marginBottom: 10 }}>
+        Clear demo data
+      </button>
 
-      <table
-        border="1"
-        cellPadding="8"
-        style={{ borderCollapse: "collapse", width: "100%" }}
-      >
+      <table className="table">
         <thead>
-          <tr style={{ background: "#f5f5f5" }}>
+          <tr>
             <th>Дата</th>
             <th>Услуга</th>
             <th>Заявител</th>
@@ -94,19 +94,22 @@ export default function AdminRequestsPage() {
               <td>{r.service.title}</td>
               <td>{r.applicant.fullName}</td>
               <td>{getStatusLabel(r.status)}</td>
-              <td>
+              <td style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {canAdminProcess(r.status) && (
-                  <button onClick={() => markProcessing(r.id)}>
+                  <button className="btn" onClick={() => markProcessing(r.id)}>
                     Mark Processing
                   </button>
                 )}
 
                 {canAdminApproveOrReject(r.status) && (
                   <>
-                    <button onClick={() => approve(r.id)}>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => approve(r.id)}
+                    >
                       Approve
                     </button>
-                    <button onClick={() => reject(r.id)}>
+                    <button className="btn" onClick={() => reject(r.id)}>
                       Reject
                     </button>
                   </>

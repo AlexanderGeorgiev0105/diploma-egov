@@ -9,14 +9,28 @@ import {
 
 export default function MyRequestsPage() {
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setRequests(loadRequests());
+    setLoading(true);
+    setTimeout(() => {
+      setRequests(loadRequests());
+      setLoading(false);
+    }, 200);
   }, []);
 
   function cancelRequest(requestId) {
     const updated = updateRequestStatus(requestId, REQUEST_STATUSES.CANCELLED);
     setRequests(updated);
+  }
+
+  if (loading) {
+    return (
+      <div>
+        <h1>My Requests</h1>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (requests.length === 0) {
